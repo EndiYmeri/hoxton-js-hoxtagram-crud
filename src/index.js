@@ -21,7 +21,6 @@
 // Challenge 2
 // Add error handling to the app. The user should have a notification if something goes wrong
 
-
 const state = {
     images: []
 }
@@ -31,21 +30,18 @@ function getImages() {
         .then(resp => resp.json())
 }
 
-
-function addLikes(imageID) {
+function addLikes(imageID, newLikes) {
     return fetch(`http://localhost:3000/images/${imageID}`, {
             method: "PATCH",
             headers: {
                 "Content-type": "application/json"
             },
             body: JSON.stringify({
-                likes: state.images[imageID - 1].likes
+                likes: newLikes
             })
         })
         // .then(resp => resp.json())
 }
-
-
 
 function addComments(imgID, theComment) {
     return fetch("http://localhost:3000/comments", {
@@ -66,7 +62,6 @@ function deleteComment(commentID) {
     return fetch(`http://localhost:3000/comments/${commentID}`, {
         method: "DELETE",
     })
-
 }
 
 
@@ -102,7 +97,7 @@ function renderImageArticle(image) {
     buttonLikeEl.textContent = "♥"
     buttonLikeEl.addEventListener('click', () => {
         image.likes += 1
-        addLikes(image.id)
+        addLikes(image.id, image.likes)
         render()
     })
 
@@ -161,6 +156,8 @@ function renderImageArticle(image) {
     articleEl.append(titleEl, imgEl, buttonDivEl, commentsUlEl, commentFormEL)
     imageContainer.append(articleEl)
 }
+
+
 
 function renderImages() {
     imageContainer.innerHTML = ""
